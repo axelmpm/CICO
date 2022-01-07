@@ -37,7 +37,7 @@ def read(dir):
                 file_reg.append((file_path, line))
     return file_reg
 
-def new_regs_exist_at(dir, old_regs):
+def new_regs_exist_at(dir, old_regs):  # TODO check if needed
     return list(set([file for file, reg in read(dir) if reg not in old_regs and is_valid(reg)]))
 
 def is_txt(file_name):

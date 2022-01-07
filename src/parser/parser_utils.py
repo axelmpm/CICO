@@ -1,3 +1,3 @@
 
-def is_valud(something):
+def is_valid(something):
     pass  # TODO
