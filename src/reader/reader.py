@@ -24,9 +24,6 @@ def listFilesIn(dir):
             files += listFilesIn(compose_dir(dir, filename))
     return files
 
-def regs_from(file_reg):
-    return [reg for _, reg in file_reg]
-
 def read(dir):
 
     entries = listFilesIn(dir)
@@ -36,6 +33,18 @@ def read(dir):
             for line in f:
                 file_reg.append((file_path, line))
     return file_reg
+
+def file_from(file_reg):
+    return file_reg[0]
+
+def reg_from(file_reg):
+    return file_reg[1]
+
+def files_from(file_reg):
+    return [file_from(e) for e in file_reg]
+
+def regs_from(file_reg):
+    return [reg_from(e) for e in file_reg]
 
 def new_regs_exist_at(dir, old_regs):  # TODO check if needed
     return list(set([file for file, reg in read(dir) if reg not in old_regs and is_valid(reg)]))
