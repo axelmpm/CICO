@@ -1,12 +1,12 @@
 import sys
-sys.path.append(r'C:\Users\axelpm\Desktop\cronos')
-sys.path.append(r'C:\Users\axelpm\Desktop\cronos\src\parser')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
 
 from os import listdir
 from os.path import isfile
 
-from src.parser.parser_regs import is_valid
-from reader_constants import CRONOS_FILE_KEYWORD, TXT_EXTENTION, DIR_SEPARATOR
+from src.parser.parser_utils import is_valid
+from reader_constants import CICO_FILE_KEYWORD, TXT_EXTENTION, DIR_SEPARATOR
 
 def compose_file_path(dir, filename):
     return dir + DIR_SEPARATOR + filename
@@ -43,11 +43,11 @@ def new_regs_exist_at(dir, old_regs):
 def is_txt(file_name):
     return TXT_EXTENTION in file_name
 
-def is_cronos_file(file_name):
-    return CRONOS_FILE_KEYWORD in file_name and is_txt(file_name)
+def is_cico_file(file_name):
+    return CICO_FILE_KEYWORD in file_name and is_txt(file_name)
 
-def keep_only_cronos_files(files):
-    return [file for file in files if is_cronos_file(file)]
+def keep_only_cico_files(files):
+    return [file for file in files if is_cico_file(file)]
 
 def directorie_of(path):
     return DIR_SEPARATOR.join(path.split(DIR_SEPARATOR)[:-1]) if isfile(path) else path
