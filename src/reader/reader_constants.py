@@ -1,0 +1,3 @@
+DIR_SEPARATOR = '/'
+CRONOS_FILE_KEYWORD = 'Stopwatch'
+TXT_EXTENTION = '.txt'

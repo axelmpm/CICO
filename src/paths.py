@@ -1,0 +1,9 @@
+BASE = 'C:/Users/axelpm/Desktop/cronos/'
+TEST_DATA_DIR = BASE + 'test_data'
+REDUCED_TEST_DATA_DIR = BASE + 'test_data/reduced_test_data'
+LARGE_RECENT_TEST_DATA_DIR = BASE + 'test_data/large_recent_test_data'
+SMALL_DATA_FILES_1 = BASE + 'test_data/small_data_files/1'
+SMALL_DATA_FILES_2 = BASE + 'test_data/small_data_files/2'
+PROCESSED_DATA = BASE + 'under_testing_data.csv'
+REAL_TIME_DATA = BASE + 'test_data/real_time_test_data'
+HISTORIC_DATA = LARGE_RECENT_TEST_DATA_DIR
