@@ -5,9 +5,9 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\reader')
 
 import unittest
 
-from src.reader.reader import read, new_regs_exist_at, regs_from, listFilesIn, directorie_of, compose_file_path
-from src.parser.parser import parse_week_num, strip_newlines_at_end, split_data_by
-from src.paths import TEST_DATA_DIR, TEST_DATA_DIR_MEDIUM, TEST_DATA_DIR_LARGE
+from src.reader.reader import read
+from src.parser.parser import parse_week_num, strip_newlines_at_end, split_data_by, parse
+from src.paths import TEST_DATA_DIR_LARGE
 
 class Test_parse_week_num(unittest.TestCase):
 
@@ -67,30 +67,29 @@ class Test_parse_week_num(unittest.TestCase):
         input = 'Seana 1:'
         with self.assertRaises(SyntaxError):
             parse_week_num(input)
- 
+
     def test12(self):
         input = 'Semana a:'
         with self.assertRaises(SyntaxError):
             parse_week_num(input)
-
 class Test_strip_newlines_at_end(unittest.TestCase):
 
     def test1(self):
-        input = [['t1', 't2'], ['t3'], ['\n']]
+        input = [['t1', 't2', '\n'], ['\n'], ['t3\n'], ['\n'], ['\n']]
         res = strip_newlines_at_end(input)
-        expected = [['t1', 't2'], ['t3']]
+        expected = [['t1', 't2', '\n'], ['\n'], ['t3\n']]
         self.assertEqual(res, expected)
 
     def test2(self):
-        input = [['t1', 't2'], ['t3'], ['\n', '\n']]
+        input = [['t1', 't2', '\n'], ['\n'], ['t3\n'], ['\n', '\n']]
         res = strip_newlines_at_end(input)
-        expected = [['t1', 't2'], ['t3']]
+        expected = [['t1', 't2', '\n'], ['\n'], ['t3\n']]
         self.assertEqual(res, expected)
 
     def test3(self):
-        input = [['t1', 't2'], ['t3']]
+        input = [['t1', 't2', '\n'], ['\n'], ['t3\n']]
         res = strip_newlines_at_end(input)
-        expected = [['t1', 't2'], ['t3']]
+        expected = [['t1', 't2', '\n'], ['\n'], ['t3\n']]
         self.assertEqual(res, expected)
 class Test_split_data_by(unittest.TestCase):
 
@@ -149,6 +148,12 @@ class Test_split_data_by(unittest.TestCase):
         res = split_data_by(symbol, regs, False, False)
         expected = [regs[0: 2], regs[3: 5], regs[6:]]
         self.assertEqual(res, expected)
+class Test_parse(unittest.TestCase):
+
+    def test1(self):
+        file_reg = read(TEST_DATA_DIR_LARGE)
+        res = parse(file_reg)
+        self.assertEqual(res)
 
 if __name__ == '__main__':
     unittest.main()

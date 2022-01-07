@@ -32,7 +32,12 @@ def split_data_by(symbol, regs, inclusive=True, containing=False):
     return [s for s in slices if len(s) > 0]
 
 def strip_newlines_at_end(sequence):
-    return [e for e in sequence if '\n' not in e]
+    for i, e in enumerate(sequence[::-1]):
+        if all(['\n' == x for x in e]):
+            continue
+        else:
+            return sequence[:-i] if i > 0 else sequence
+    return sequence
 
 def parse_week_num(raw_week_num):
     if bool(search(f'^ *{WEEK_SYMBOL} *[0-9]+ *: *$', raw_week_num)):

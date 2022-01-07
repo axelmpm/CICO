@@ -97,7 +97,6 @@ class Test_collapse(unittest.TestCase):
             ('f3', 'w6', 'd16'), ('f3', 'w6', 'd17'), ('f3', 'w6', 'd18'),
         ]
         self.assertEqual(res, expected)
-
 class Test_distribute(unittest.TestCase):
 
     def test1(self):
