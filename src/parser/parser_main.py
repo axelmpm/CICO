@@ -1,51 +1,13 @@
 import sys
 sys.path.append(r'C:\Users\axelpm\Desktop\cico')
-sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
-
-from re import search, sub
 
 from src.utils import collapse
-from parser_utils import split_data_by, index_to_identifier, strip_newlines_at_end, factor_out_file_name, base_atomic_parsing
-from parser_food import parse_reg
-from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR, DAYS_NAMES, WEIGHT_KEYWORD, INTEGER_PATTERN, FLOAT_PATTERN
+from parser_utils import split_data_by, index_to_identifier, strip_newlines_at_end, factor_out_file_name
+from parser_atomics import FIELD_PARSERS, parse_day_name, parse_day_weight, parse_week_num
+from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR
 
-def parse_week_num(raw_week_num):
-    def checker(raw_day_name):
-        return bool(search(f'^ *{WEEK_SYMBOL} *[0-9]+ *: *$', raw_week_num))
-
-    def parser(matched, raw_day_name):
-        return int(sub('[^0-9]', '', raw_week_num))
-
-    error_message = 'week format invalid'
-    return base_atomic_parsing(raw_week_num, checker, parser, error_message)
-
-def parse_day_name(raw_day_name):
-
-    def checker(raw_day_name):
-        matched = [day_name for day_name in DAYS_NAMES if day_name in raw_day_name]
-        return matched
-
-    def parser(matched, raw_day_name):
-        return matched[0]
-
-    error_message = 'day name format invalid'
-    return base_atomic_parsing(raw_day_name, checker, parser, error_message)
-
-def parse_day_weight(raw_day_weight):
-
-    def checker(raw_day_weight):
-        pattern1 = f'^ *{INTEGER_PATTERN} *(kg)? *$'
-        pattern2 = f'^ *{FLOAT_PATTERN} *(kg)? *$'
-        pattern3 = f'^ *{WEIGHT_KEYWORD} *:? *{INTEGER_PATTERN} *(kg)? *$'
-        pattern4 = f'^ *{WEIGHT_KEYWORD} *:? *{FLOAT_PATTERN} *(kg)? *$'
-        patterns = [pattern1, pattern2, pattern3, pattern4]
-        return any([bool(search(pattern, raw_day_weight)) for pattern in patterns])
-
-    def parser(matched, raw_day_weight):
-        return float(sub('[^0-9\\.]', '', raw_day_weight))
-
-    error_message = 'day weight format invalid'
-    return base_atomic_parsing(raw_day_weight, checker, parser, error_message)
+def parse_reg(raw_reg):
+    return [(field_identifier, field_parser(raw_reg)) for field_identifier, field_parser in FIELD_PARSERS]
 
 def parse_meal(id, raw_meal):
     return id, [parse_reg(raw_reg) for raw_reg in raw_meal]

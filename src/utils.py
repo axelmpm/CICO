@@ -1,3 +1,4 @@
+from re import search
 
 def get_indexes_of(element, sequence, exact_match=True):
     if exact_match:
@@ -42,3 +43,12 @@ def split_into_classes(sequence, mapper):
         else:
             classes[mapper(e)] = [e]
     return classes
+
+def matches_with(patterns, string):
+    for pattern in patterns:
+        if match := search(pattern, string):
+            return match.group()
+    return False
+
+def do_nothing(x):
+    return x

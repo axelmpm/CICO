@@ -5,10 +5,16 @@ from src.reader.reader import file_from, regs_from
 from src.utils import get_indexes_of, split_into_classes
 
 def base_atomic_parsing(raw, checker, parser, error_message, raises=True):
-    if metadata := checker(raw):
-        return parser(metadata, raw)
+    if match := checker(raw):
+        return parser(match)
     else:
         raise SyntaxError(f'{error_message}: {raw}') if raises else None
+
+def float_parser(match):
+    return float(match)
+
+def int_parser(match):
+    return int(match)
 
 def identifier_to_index(i):
     return i - 1
