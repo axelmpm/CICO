@@ -4,42 +4,10 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
 
 from re import search, sub
 
-from src.reader.reader import file_from, regs_from
-from src.utils import get_indexes_of, split_into_classes, collapse
-from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR, DAYS_NAMES, WEIGHT_KEYWORD, INTEGER_PATTERN, FLOAT_PATTERN
+from src.utils import collapse
+from parser_utils import split_data_by, index_to_identifier, strip_newlines_at_end, factor_out_file_name, base_atomic_parsing
 from parser_food import parse_reg
-from parser_utils import base_atomic_parsing
-
-def identifier_to_index(i):
-    return i - 1
-
-def index_to_identifier(i):
-    return i + 1
-
-def split_data_by(symbol, regs, inclusive=True, exact_match=True):
-    indices = get_indexes_of(symbol, regs, exact_match=exact_match)
-    if len(indices) > 0:
-        first = [regs[:indices[0]]]
-        if inclusive:
-            last = [regs[indices[-1]:]]
-            middle = [regs[current_idx: next_idx] for current_idx, next_idx in zip(indices, indices[1:])]
-        else:
-            last = [regs[indices[-1] + 1:]] if indices[-1] + 1 < len(regs) else []
-            middle = [regs[current_idx + 1: next_idx] for current_idx, next_idx in zip(indices, indices[1:]) if current_idx + 1 < next_idx]
-
-        slices = first + middle + last
-    else:
-        slices = []
-
-    return [s for s in slices if len(s) > 0]
-
-def strip_newlines_at_end(sequence):
-    for i, e in enumerate(sequence[::-1]):
-        if all(['\n' == x for x in e]):
-            continue
-        else:
-            return sequence[:-i] if i > 0 else sequence
-    return sequence
+from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR, DAYS_NAMES, WEIGHT_KEYWORD, INTEGER_PATTERN, FLOAT_PATTERN
 
 def parse_week_num(raw_week_num):
     def checker(raw_day_name):
@@ -109,9 +77,6 @@ def parse_week(raw_week):  # TODO que parse_week no se entere de la implementaci
 def parse_file(raw_file):
     file_name, raw_file_content = raw_file
     return file_name, [parse_week(raw_week) for raw_week in split_data_by(WEEK_SYMBOL, raw_file_content, inclusive=True, exact_match=False) if len(raw_week) > 0]
-
-def factor_out_file_name(file_reg):
-    return [(file_name, regs_from(file_reg_class)) for file_name, file_reg_class in split_into_classes(file_reg, file_from).items()]
 
 def parse_files(files):
     return [(parse_file(raw_file)) for raw_file in files]

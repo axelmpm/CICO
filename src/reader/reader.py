@@ -5,7 +5,6 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
 from os import listdir
 from os.path import isfile
 
-from src.parser.parser_utils import is_valid
 from reader_constants import CICO_FILE_KEYWORD, TXT_EXTENTION, DIR_SEPARATOR
 
 def compose_file_path(dir, filename):
@@ -47,7 +46,8 @@ def regs_from(file_reg):
     return [reg_from(e) for e in file_reg]
 
 def new_regs_exist_at(dir, old_regs):  # TODO check if needed
-    return list(set([file for file, reg in read(dir) if reg not in old_regs and is_valid(reg)]))
+    # return list(set([file for file, reg in read(dir) if reg not in old_regs and is_valid(reg)]))
+    pass
 
 def is_txt(file_name):
     return TXT_EXTENTION in file_name

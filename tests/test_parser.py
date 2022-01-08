@@ -5,8 +5,9 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\reader')
 
 import unittest
 
+from src.parser.parser_utils import strip_newlines_at_end, split_data_by
 from src.reader.reader import read
-from src.parser.parser_main import parse_week_num, strip_newlines_at_end, split_data_by, parse_files, parse_day_weight, parse_day_name
+from src.parser.parser_main import parse_week_num, parse_files, parse_day_weight, parse_day_name
 from src.parser.parser_food import parse_food_cals, parse_food_amount, parse_food_carbs, parse_food_fat, parse_food_grams
 from src.parser.parser_food import parse_food_name, parse_food_protein, parse_food_quality, parse_reg
 from src.paths import TEST_DATA_DIR_LARGE
