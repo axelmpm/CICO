@@ -7,6 +7,7 @@ from re import search, sub
 from src.reader.reader import file_from, regs_from
 from src.utils import get_indexes_of, split_into_classes, collapse
 from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR, DAYS_NAMES, WEIGHT_KEYWORD, INTEGER_PATTERN, FLOAT_PATTERN
+from parser_food import parse_reg
 
 def identifier_to_index(i):
     return i - 1
@@ -55,18 +56,15 @@ def parse_day_name(raw_day_name):
         raise SyntaxError(f'day name format invalid: {raw_day_name}')
 
 def parse_day_weight(raw_day_weight):
-    pattern1 = f'^ *{INTEGER_PATTERN} *$'
-    pattern2 = f'^ *{FLOAT_PATTERN} *$'
-    pattern3 = f'^ *{WEIGHT_KEYWORD} *:? *{INTEGER_PATTERN} *$'
-    pattern4 = f'^ *{WEIGHT_KEYWORD} *:? *{FLOAT_PATTERN} *$'
+    pattern1 = f'^ *{INTEGER_PATTERN} *(kg)? *$'
+    pattern2 = f'^ *{FLOAT_PATTERN} *(kg)? *$'
+    pattern3 = f'^ *{WEIGHT_KEYWORD} *:? *{INTEGER_PATTERN} *(kg)? *$'
+    pattern4 = f'^ *{WEIGHT_KEYWORD} *:? *{FLOAT_PATTERN} *(kg)? *$'
     patterns = [pattern1, pattern2, pattern3, pattern4]
     if any([bool(search(pattern, raw_day_weight)) for pattern in patterns]):
         return float(sub('[^0-9\\.]', '', raw_day_weight))
     else:
         raise SyntaxError(f'day weight format invalid: {raw_day_weight}')
-
-def parse_reg(raw_reg):
-    return raw_reg
 
 def parse_meal(id, raw_meal):
     return id, [parse_reg(raw_reg) for raw_reg in raw_meal]

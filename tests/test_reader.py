@@ -55,7 +55,7 @@ class Test_directorie_of(unittest.TestCase):
         res = directorie_of(input)
         expected = TEST_DATA_DIR_LARGE
         self.assertEqual(expected, res)
-      
+
 class Test_is_txt(unittest.TestCase):
 
     def test1(self):
