@@ -4,8 +4,10 @@ DIVIDER = '---'
 INTERLINE_SEPARATOR = '\n'
 WEIGHT_KEYWORD = 'PESO'
 
-INTEGER_PATTERN = '[0-9]+'
-FLOAT_PATTERN = '[0-9]+\\.[0-9]+'
+INTEGER_PATTERN = '-?[0-9]+'
+FLOAT_PATTERN = '-?[0-9]+\\.[0-9]+'
+NUMBER_PATTERN = '-?[0-9]+\\.?[0-9]*'
+WEIGHT_PATTERN = f'{WEIGHT_KEYWORD}\\s*:?'
 
 DAYS_NAMES = [
     'Lunes',

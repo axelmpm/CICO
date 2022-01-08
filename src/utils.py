@@ -44,11 +44,19 @@ def split_into_classes(sequence, mapper):
             classes[mapper(e)] = [e]
     return classes
 
-def matches_with(patterns, string):
+def my_search(pattern, target, string):
+    matches = search(pattern, string)
+    if matches:
+        for match in matches.groups():
+            if match is not None and search(target, match):
+                return match
+    return None
+
+def matches_with(patterns, target, string):
     for pattern in patterns:
-        if match := search(pattern, string):
-            return match.group()
-    return False
+        if match := my_search(pattern, target, string):
+            return match
+    return None
 
 def do_nothing(x):
     return x

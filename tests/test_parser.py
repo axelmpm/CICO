@@ -8,8 +8,8 @@ import unittest
 from src.parser.parser_utils import strip_newlines_at_end, split_data_by
 from src.reader.reader import read
 from src.parser.parser_main import parse_week_num, parse_files, parse_day_weight, parse_day_name
-from src.parser.parser_atomics import parse_food_cals, parse_food_amount, parse_food_carbs, parse_food_fat, parse_food_grams
-from src.parser.parser_atomics import parse_food_name, parse_food_protein, parse_food_quality, parse_reg
+from src.parser.parser_atomics import parse_food_cals, parse_food_amount, parse_food_carbs, parse_food_fat, parse_food_protein
+from src.parser.parser_atomics import parse_food_name, parse_food_grams, parse_food_quality
 from src.paths import TEST_DATA_DIR_LARGE
 
 class Test_parse_week_num(unittest.TestCase):
@@ -61,17 +61,12 @@ class Test_parse_week_num(unittest.TestCase):
         with self.assertRaises(SyntaxError):
             parse_week_num(input)
 
-    def test10(self):
-        input = 'Semana 1\n\n\n'
-        with self.assertRaises(SyntaxError):
-            parse_week_num(input)
-
-    def test11(self):
+    def test9(self):
         input = 'Seana 1:'
         with self.assertRaises(SyntaxError):
             parse_week_num(input)
 
-    def test12(self):
+    def test10(self):
         input = 'Semana a:'
         with self.assertRaises(SyntaxError):
             parse_week_num(input)
@@ -256,64 +251,54 @@ class Test_parse_day_weight(unittest.TestCase):
         self.assertEqual(res, expected)
 
     def test18(self):
-        input = 'PESO -60'
+        input = 'randomword 60.0'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
 
     def test19(self):
-        input = 'PESO -60.0'
-        with self.assertRaises(SyntaxError):
-            parse_day_weight(input)
-
-    def test20(self):
-        input = 'randomword 60.0'
-        with self.assertRaises(SyntaxError):
-            parse_day_weight(input)
-
-    def test21(self):
         input = 'PESO randomword 60.0'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
 
-    def test22(self):
+    def test20(self):
         input = 'randomword'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
 
-    def test23(self):
+    def test21(self):
         input = 'PESO'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
 
-    def test24(self):
+    def test22(self):
         input = 'randomword 60.0'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
 
-    def test25(self):
+    def test23(self):
         input = 'PESO 60.0 60.2'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
 
-    def test26(self):
+    def test24(self):
         input = 'PESO: 60.2kg\n'
         res = parse_day_weight(input)
         expected = 60.2
         self.assertEqual(res, expected)
 
-    def test27(self):
+    def test25(self):
         input = 'PESO: 60.2kg  \n'
         res = parse_day_weight(input)
         expected = 60.2
         self.assertEqual(res, expected)
 
-    def test28(self):
+    def test26(self):
         input = 'PESO: 60.2 kg  \n'
         res = parse_day_weight(input)
         expected = 60.2
         self.assertEqual(res, expected)
 
-    def test29(self):
+    def test27(self):
         input = '60.2 kg  \n'
         res = parse_day_weight(input)
         expected = 60.2
@@ -418,92 +403,91 @@ class Test_parse_day_name(unittest.TestCase):
         input = 'DominDomingogo'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
-class Test_parse_food_grams(unittest.TestCase):
+class Test_parse_food_protein(unittest.TestCase):
 
     def test1(self):
         input = 'pechuga herv    235g        393     C   67.9p'
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.9
         self.assertEqual(res, expected)
 
     def test2(self):
         input = 'pechuga herv 235g 393 C 67p\n'
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.0
         self.assertEqual(res, expected)
 
     def test3(self):
         input = 'pechuga herv    235g        393     C  '
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = None
         self.assertEqual(res, expected)
 
     def test4(self):
         input = 'pechuga herv    235g        393     C   67.9p\n'
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.9
         self.assertEqual(res, expected)
 
     def test5(self):
         input = 'pechuga herv    235g        393     C   67p\n'
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.0
         self.assertEqual(res, expected)
 
     def test6(self):
         input = 'pechuga herv    235g        393     C \n'
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = None
         self.assertEqual(res, expected)
 
     def test7(self):
         input = '67.9p'
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.9
         self.assertEqual(res, expected)
 
     def test8(self):
         input = '67p'
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.0
         self.assertEqual(res, expected)
 
     def test9(self):
         input = ''
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = None
         self.assertEqual(res, expected)
 
     def test10(self):
         input = '67p  '
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.0
         self.assertEqual(res, expected)
 
     def test11(self):
         input = '67 p  '
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = 67.0
         self.assertEqual(res, expected)
 
     def test12(self):
         input = '67 cp  '
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = None
         self.assertEqual(res, expected)
 
     def test13(self):
         input = '-67p  '
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = -67.0
         self.assertEqual(res, expected)
 
     def test14(self):
         input = '-67.3p  '
-        res = parse_food_grams(input)
+        res = parse_food_protein(input)
         expected = -67.3
         self.assertEqual(res, expected)
-
 class Test_parse_files(unittest.TestCase):
 
     def test1(self):
