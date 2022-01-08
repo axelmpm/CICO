@@ -1,11 +1,11 @@
 
-def get_indexes_of(element, sequence, containing=False):
-    if containing:
-        def filter(e, element):
-            return element in e
-    else:
+def get_indexes_of(element, sequence, exact_match=True):
+    if exact_match:
         def filter(e, element):
             return element == e
+    else:
+        def filter(e, element):
+            return element in e
     return [i for i, e in enumerate(sequence) if filter(e, element)]
 
 def flatten(sequence):
