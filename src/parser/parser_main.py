@@ -8,6 +8,7 @@ from src.reader.reader import file_from, regs_from
 from src.utils import get_indexes_of, split_into_classes, collapse
 from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR, DAYS_NAMES, WEIGHT_KEYWORD, INTEGER_PATTERN, FLOAT_PATTERN
 from parser_food import parse_reg
+from parser_utils import base_atomic_parsing
 
 def identifier_to_index(i):
     return i - 1
@@ -41,30 +42,42 @@ def strip_newlines_at_end(sequence):
     return sequence
 
 def parse_week_num(raw_week_num):
-    if bool(search(f'^ *{WEEK_SYMBOL} *[0-9]+ *: *$', raw_week_num)):
+    def checker(raw_day_name):
+        return bool(search(f'^ *{WEEK_SYMBOL} *[0-9]+ *: *$', raw_week_num))
+
+    def parser(matched, raw_day_name):
         return int(sub('[^0-9]', '', raw_week_num))
-    else:
-        raise SyntaxError(f'week format invalid: {raw_week_num}')
+
+    error_message = 'week format invalid'
+    return base_atomic_parsing(raw_week_num, checker, parser, error_message)
 
 def parse_day_name(raw_day_name):
-    matched = [day_name for day_name in DAYS_NAMES if day_name in raw_day_name]
-    if len(matched) > 1:
-        raise SyntaxError(f'cant have more than one day name: {raw_day_name}')
-    elif len(matched) == 1:
+
+    def checker(raw_day_name):
+        matched = [day_name for day_name in DAYS_NAMES if day_name in raw_day_name]
+        return matched
+
+    def parser(matched, raw_day_name):
         return matched[0]
-    else:
-        raise SyntaxError(f'day name format invalid: {raw_day_name}')
+
+    error_message = 'day name format invalid'
+    return base_atomic_parsing(raw_day_name, checker, parser, error_message)
 
 def parse_day_weight(raw_day_weight):
-    pattern1 = f'^ *{INTEGER_PATTERN} *(kg)? *$'
-    pattern2 = f'^ *{FLOAT_PATTERN} *(kg)? *$'
-    pattern3 = f'^ *{WEIGHT_KEYWORD} *:? *{INTEGER_PATTERN} *(kg)? *$'
-    pattern4 = f'^ *{WEIGHT_KEYWORD} *:? *{FLOAT_PATTERN} *(kg)? *$'
-    patterns = [pattern1, pattern2, pattern3, pattern4]
-    if any([bool(search(pattern, raw_day_weight)) for pattern in patterns]):
+
+    def checker(raw_day_weight):
+        pattern1 = f'^ *{INTEGER_PATTERN} *(kg)? *$'
+        pattern2 = f'^ *{FLOAT_PATTERN} *(kg)? *$'
+        pattern3 = f'^ *{WEIGHT_KEYWORD} *:? *{INTEGER_PATTERN} *(kg)? *$'
+        pattern4 = f'^ *{WEIGHT_KEYWORD} *:? *{FLOAT_PATTERN} *(kg)? *$'
+        patterns = [pattern1, pattern2, pattern3, pattern4]
+        return any([bool(search(pattern, raw_day_weight)) for pattern in patterns])
+
+    def parser(matched, raw_day_weight):
         return float(sub('[^0-9\\.]', '', raw_day_weight))
-    else:
-        raise SyntaxError(f'day weight format invalid: {raw_day_weight}')
+
+    error_message = 'day weight format invalid'
+    return base_atomic_parsing(raw_day_weight, checker, parser, error_message)
 
 def parse_meal(id, raw_meal):
     return id, [parse_reg(raw_reg) for raw_reg in raw_meal]

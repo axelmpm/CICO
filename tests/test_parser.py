@@ -6,7 +6,9 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\reader')
 import unittest
 
 from src.reader.reader import read
-from src.parser.parser import parse_week_num, strip_newlines_at_end, split_data_by, factor_out_file_name, parse_files, parse_day_weight, parse_day_name
+from src.parser.parser_main import parse_week_num, strip_newlines_at_end, split_data_by, parse_files, parse_day_weight, parse_day_name
+from src.parser.parser_food import parse_food_cals, parse_food_amount, parse_food_carbs, parse_food_fat, parse_food_grams
+from src.parser.parser_food import parse_food_name, parse_food_protein, parse_food_quality, parse_reg
 from src.paths import TEST_DATA_DIR_LARGE
 
 class Test_parse_week_num(unittest.TestCase):
@@ -415,6 +417,13 @@ class Test_parse_day_name(unittest.TestCase):
         input = 'DominDomingogo'
         with self.assertRaises(SyntaxError):
             parse_day_weight(input)
+class Test_parse_food_grams(unittest.TestCase):
+
+    def test1(self):
+        input = 'pechuga herv    235g        393     C   67.9p'
+        res = parse_food_grams(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
 class Test_parse_files(unittest.TestCase):
 
     def test1(self):
