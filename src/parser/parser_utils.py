@@ -4,12 +4,6 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico')
 from src.reader.reader import file_from, regs_from
 from src.utils import get_indexes_of, split_into_classes
 
-def float_parser(match):
-    return float(match)
-
-def int_parser(match):
-    return int(match)
-
 def identifier_to_index(i):
     return i - 1
 

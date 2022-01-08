@@ -4,7 +4,6 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico')
 from enum import Enum
 
 from src.utils import matches_with, do_nothing
-from parser_utils import float_parser, int_parser
 from parser_constants import WEEK_SYMBOL, DAYS_NAMES, WEIGHT_PATTERN, NUMBER_PATTERN, INTEGER_PATTERN
 
 class FieldIdentifier(Enum):
@@ -21,9 +20,15 @@ class FieldIdentifier(Enum):
     GLYCEMIC_INDEX = 11
     QUALITY = 12
 
+def float_parser(match):
+    return float(match)
+
+def int_parser(match):
+    return int(match)
+
 def unit_checker(unit):
     def checker(raw_reg):
-        pattern = f'^.*?({NUMBER_PATTERN})\\s*{unit}\\s*$'
+        pattern = f'^.*?({NUMBER_PATTERN})\\s*{unit}(\\s.*|)$'
         patterns = [pattern]
         target = NUMBER_PATTERN
         return matches_with(patterns, target, raw_reg)
@@ -77,17 +82,6 @@ def parse_food_name(raw_reg):
 
     error_message = 'invalid name format'
     return base_atomic_parsing(raw_reg, checker, do_nothing, error_message, raises=False)
-
-def parse_food_quality(raw_reg):
-
-    def checker(raw_reg):
-        return raw_reg
-
-    def parser(matched):
-        return matched
-
-    error_message = 'invalid quality format'
-    return base_atomic_parsing(raw_reg, checker, parser, error_message, raises=False)
 
 def parse_week_num(raw_week_num):
 

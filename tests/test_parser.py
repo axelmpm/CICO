@@ -9,7 +9,7 @@ from src.parser.parser_utils import strip_newlines_at_end, split_data_by
 from src.reader.reader import read
 from src.parser.parser_main import parse_week_num, parse_files, parse_day_weight, parse_day_name
 from src.parser.parser_atomics import parse_food_cals, parse_food_amount, parse_food_carbs, parse_food_fat, parse_food_protein
-from src.parser.parser_atomics import parse_food_name, parse_food_grams, parse_food_quality
+from src.parser.parser_atomics import parse_food_name, parse_food_grams
 from src.paths import TEST_DATA_DIR_LARGE
 
 class Test_parse_week_num(unittest.TestCase):
@@ -487,6 +487,396 @@ class Test_parse_food_protein(unittest.TestCase):
         input = '-67.3p  '
         res = parse_food_protein(input)
         expected = -67.3
+        self.assertEqual(res, expected)
+
+class Test_parse_food_fat(unittest.TestCase):
+
+    def test1(self):
+        input = 'pechuga herv    235g        393     C   67.9f'
+        res = parse_food_fat(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test2(self):
+        input = 'pechuga herv 235g 393 C 67f\n'
+        res = parse_food_fat(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test3(self):
+        input = 'pechuga herv    235g        393     C  '
+        res = parse_food_fat(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test4(self):
+        input = 'pechuga herv    235g        393     C   67.9f\n'
+        res = parse_food_fat(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test5(self):
+        input = 'pechuga herv    235g        393     C   67f\n'
+        res = parse_food_fat(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test6(self):
+        input = 'pechuga herv    235g        393     C \n'
+        res = parse_food_fat(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test7(self):
+        input = '67.9f'
+        res = parse_food_fat(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test8(self):
+        input = '67f'
+        res = parse_food_fat(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test9(self):
+        input = ''
+        res = parse_food_fat(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test10(self):
+        input = '67f  '
+        res = parse_food_fat(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test11(self):
+        input = '67 f  '
+        res = parse_food_fat(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test12(self):
+        input = '67 cf  '
+        res = parse_food_fat(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test13(self):
+        input = '-67f  '
+        res = parse_food_fat(input)
+        expected = -67.0
+        self.assertEqual(res, expected)
+
+    def test14(self):
+        input = '-67.3f  '
+        res = parse_food_fat(input)
+        expected = -67.3
+        self.assertEqual(res, expected)
+
+class Test_parse_food_carbs(unittest.TestCase):
+
+    def test1(self):
+        input = 'pechuga herv    235g        393     C   67.9c'
+        res = parse_food_carbs(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test2(self):
+        input = 'pechuga herv 235g 393 C 67c\n'
+        res = parse_food_carbs(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test3(self):
+        input = 'pechuga herv    235g        393     C  '
+        res = parse_food_carbs(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test4(self):
+        input = 'pechuga herv    235g        393     C   67.9c\n'
+        res = parse_food_carbs(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test5(self):
+        input = 'pechuga herv    235g        393     C   67c\n'
+        res = parse_food_carbs(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test6(self):
+        input = 'pechuga herv    235g        393     C \n'
+        res = parse_food_carbs(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test7(self):
+        input = '67.9c'
+        res = parse_food_carbs(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test8(self):
+        input = '67c'
+        res = parse_food_carbs(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test9(self):
+        input = ''
+        res = parse_food_carbs(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test10(self):
+        input = '67c  '
+        res = parse_food_carbs(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test11(self):
+        input = '67 c  '
+        res = parse_food_carbs(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test12(self):
+        input = '67 cd  '
+        res = parse_food_carbs(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test13(self):
+        input = '-67c  '
+        res = parse_food_carbs(input)
+        expected = -67.0
+        self.assertEqual(res, expected)
+
+    def test14(self):
+        input = '-67.3c  '
+        res = parse_food_carbs(input)
+        expected = -67.3
+        self.assertEqual(res, expected)
+
+class Test_parse_food_grams(unittest.TestCase):
+
+    def test1(self):
+        input = 'pechuga herv    67.9g        393     C   100c'
+        res = parse_food_grams(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test2(self):
+        input = 'pechuga herv 67g 393 C 100c\n'
+        res = parse_food_grams(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test3(self):
+        input = 'pechuga herv    235        393     C  '
+        res = parse_food_grams(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test4(self):
+        input = 'pechuga herv    67.9g        393     C   100c\n'
+        res = parse_food_grams(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test5(self):
+        input = 'pechuga herv    67g        393     C   100c\n'
+        res = parse_food_grams(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test6(self):
+        input = 'pechuga herv    235        393     C \n'
+        res = parse_food_grams(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test7(self):
+        input = '67.9g'
+        res = parse_food_grams(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test8(self):
+        input = '67g'
+        res = parse_food_grams(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test9(self):
+        input = ''
+        res = parse_food_grams(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test10(self):
+        input = '67g  '
+        res = parse_food_grams(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test11(self):
+        input = '67 g  '
+        res = parse_food_grams(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test12(self):
+        input = '67 cg  '
+        res = parse_food_grams(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test13(self):
+        input = '-67g  '
+        res = parse_food_grams(input)
+        expected = -67.0
+        self.assertEqual(res, expected)
+
+    def test14(self):
+        input = '-67.3g  '
+        res = parse_food_grams(input)
+        expected = -67.3
+        self.assertEqual(res, expected)
+
+class Test_parse_food_cals(unittest.TestCase):
+
+    def test1(self):
+        input = 'pechuga herv    100g        67.9     C   100c'
+        res = parse_food_cals(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test2(self):
+        input = 'pechuga herv 100g 67 C 100c\n'
+        res = parse_food_cals(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test3(self):
+        input = 'pechuga herv    C  '
+        res = parse_food_cals(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test4(self):
+        input = 'pechuga herv    100g        67.9     C   100c\n'
+        res = parse_food_cals(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test5(self):
+        input = 'pechuga herv    100g        67     C   100c\n'
+        res = parse_food_cals(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test6(self):
+        input = '67 pechuga herv    100g    100       C   100c\n'
+        res = parse_food_cals(input)
+        expected = 100
+        self.assertEqual(res, expected)
+
+    def test7(self):
+        input = 'pechuga herv       C \n'
+        res = parse_food_cals(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test8(self):
+        input = 'pechuga herv    100g        -67     C   100c\n'
+        res = parse_food_cals(input)
+        expected = -67.0
+        self.assertEqual(res, expected)
+
+    def test9(self):
+        input = 'pechuga herv    100g        -67.9     C   100c\n'
+        res = parse_food_cals(input)
+        expected = -67.9
+        self.assertEqual(res, expected)
+
+class Test_parse_food_amount(unittest.TestCase):
+
+    def test1(self):
+        input = '67.9 pechuga herv    100g      200       C   100c'
+        res = parse_food_amount(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test2(self):
+        input = '67 pechuga herv 100g 200 C 100c\n'
+        res = parse_food_amount(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test3(self):
+        input = 'pechuga herv    C  '
+        res = parse_food_amount(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test4(self):
+        input = '67.9 pechuga herv    100g        200    C   100c\n'
+        res = parse_food_amount(input)
+        expected = 67.9
+        self.assertEqual(res, expected)
+
+    def test5(self):
+        input = '67 pechuga herv    100g        200     C   100c\n'
+        res = parse_food_amount(input)
+        expected = 67.0
+        self.assertEqual(res, expected)
+
+    def test6(self):
+        input = 'pechuga herv       C \n'
+        res = parse_food_amount(input)
+        expected = None
+        self.assertEqual(res, expected)
+
+    def test7(self):
+        input = '-67 pechuga herv    100g             C   100c\n'
+        res = parse_food_amount(input)
+        expected = -67.0
+        self.assertEqual(res, expected)
+
+    def test8(self):
+        input = '-67.9 pechuga herv    100g             C   100c\n'
+        res = parse_food_amount(input)
+        expected = -67.9
+        self.assertEqual(res, expected)
+
+class Test_parse_food_name(unittest.TestCase):
+
+    def test1(self):
+        input = '67.9 pechuga herv    100g      200       C   100c'
+        res = parse_food_name(input)
+        expected = 'pechuga herv'
+        self.assertEqual(res, expected)
+
+    def test2(self):
+        input = '67.9 pechuga    100g      200       C   100c'
+        res = parse_food_name(input)
+        expected = 'pechuga'
+        self.assertEqual(res, expected)
+
+    def test3(self):
+        input = '67.9 pechuga herv hoy   100g      200       C   100c'
+        res = parse_food_name(input)
+        expected = 'pechuga herv hoy'
+        self.assertEqual(res, expected)
+
+    def test4(self):
+        input = '67.9   100g      200       C   100c'
+        res = parse_food_name(input)
+        expected = None
         self.assertEqual(res, expected)
 class Test_parse_files(unittest.TestCase):
 
