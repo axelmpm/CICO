@@ -8,6 +8,7 @@ INTEGER_PATTERN = '-?[0-9]+'
 FLOAT_PATTERN = '-?[0-9]+\\.[0-9]+'
 NUMBER_PATTERN = '-?[0-9]+\\.?[0-9]*'
 WEIGHT_PATTERN = f'{WEIGHT_KEYWORD}\\s*:?'
+FOOD_NAME_PATTERN = '([a-zA-Z]{2,}\\s*)+'
 
 DAYS_NAMES = [
     'Lunes',

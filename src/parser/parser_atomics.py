@@ -3,8 +3,9 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico')
 
 from enum import Enum
 
-from src.utils import matches_with, do_nothing
-from parser_constants import WEEK_SYMBOL, DAYS_NAMES, WEIGHT_PATTERN, NUMBER_PATTERN, INTEGER_PATTERN
+from src.utils import matches_with
+from parser_utils import remove_white_spaces_at_start_and_end
+from parser_constants import WEEK_SYMBOL, DAYS_NAMES, WEIGHT_PATTERN, NUMBER_PATTERN, INTEGER_PATTERN, FOOD_NAME_PATTERN
 
 class FieldIdentifier(Enum):
     GRAMS = 1
@@ -62,7 +63,10 @@ def parse_food_protein(raw_reg):
 def parse_food_cals(raw_reg):
 
     def checker(raw_reg):
-        return raw_reg
+        pattern = f'^.*({FOOD_NAME_PATTERN}).*?({NUMBER_PATTERN})(\\s.*|$)'
+        patterns = [pattern]
+        target = NUMBER_PATTERN
+        return matches_with(patterns, target, raw_reg)
 
     error_message = 'invalid cals format'
     return base_atomic_parsing(raw_reg, checker, float_parser, error_message, raises=False)
@@ -70,7 +74,10 @@ def parse_food_cals(raw_reg):
 def parse_food_amount(raw_reg):
 
     def checker(raw_reg):
-        return raw_reg
+        pattern = f'^\\s*?({NUMBER_PATTERN})\\s*({FOOD_NAME_PATTERN}).*$'
+        patterns = [pattern]
+        target = NUMBER_PATTERN
+        return matches_with(patterns, target, raw_reg)
 
     error_message = 'invalid amount format'
     return base_atomic_parsing(raw_reg, checker, float_parser, error_message, raises=False)
@@ -78,10 +85,17 @@ def parse_food_amount(raw_reg):
 def parse_food_name(raw_reg):
 
     def checker(raw_reg):
-        return raw_reg
+        pattern = f'^.*?({FOOD_NAME_PATTERN}).*$'
+        patterns = [pattern]
+        target = FOOD_NAME_PATTERN
+        return matches_with(patterns, target, raw_reg)
+
+    def parser(matched):
+        parsed = remove_white_spaces_at_start_and_end(matched)
+        return parsed if len(parsed) > 0 else None
 
     error_message = 'invalid name format'
-    return base_atomic_parsing(raw_reg, checker, do_nothing, error_message, raises=False)
+    return base_atomic_parsing(raw_reg, checker, parser, error_message, raises=False)
 
 def parse_week_num(raw_week_num):
 
@@ -125,5 +139,4 @@ FIELD_PARSERS = [
     (FieldIdentifier.FAT, parse_food_fat),
     (FieldIdentifier.PROTEIN, parse_food_protein),
     (FieldIdentifier.FOOD_NAME, parse_food_name),
-    (FieldIdentifier.QUALITY, parse_food_quality),
 ]

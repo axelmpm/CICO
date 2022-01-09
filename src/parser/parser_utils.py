@@ -37,3 +37,6 @@ def strip_newlines_at_end(sequence):
 
 def factor_out_file_name(file_reg):
     return [(file_name, regs_from(file_reg_class)) for file_name, file_reg_class in split_into_classes(file_reg, file_from).items()]
+
+def remove_white_spaces_at_start_and_end(string):
+    return string.rstrip()[::-1].rstrip()[::-1]
