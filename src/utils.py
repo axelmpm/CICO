@@ -18,6 +18,20 @@ def flatten(sequence):
             flattened.append(e)
     return flattened
 
+def tuple_flatten(elements):
+    flattened = []
+    if type(elements) is list:
+        return [tuple_flatten(e) for e in elements]
+    elif type(elements) is tuple:
+        for e in elements:
+            if type(e) is tuple:
+                flattened.extend(list(tuple_flatten(e)))
+            else:
+                flattened.append(e)
+        return tuple(flattened)
+    else:
+        return elements
+
 def distribute(x, y):
     if type(y) is list:
         return [distribute(x, e) for e in y]
@@ -29,9 +43,9 @@ def distribute(x, y):
 def collapse(structure):
     if type(structure) is list:
         return flatten([collapse(e) for e in structure])
-    if type(structure) is tuple and len(structure) == 2:
-        x, s = structure
-        return distribute(x, collapse(s))
+    if type(structure) is tuple:
+        x, s = structure[:-1], structure[-1]
+        return tuple_flatten(distribute(x, collapse(s)))
     else:
         return structure
 
@@ -57,6 +71,3 @@ def matches_with(patterns, target, string):
         if match := my_search(pattern, target, string):
             return match
     return None
-
-def do_nothing(x):
-    return x

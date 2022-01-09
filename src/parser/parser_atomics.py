@@ -129,14 +129,14 @@ def parse_day_weight(raw_day_weight):
         return matches_with(patterns, target, raw_day_weight)
 
     error_message = 'day weight format invalid'
-    return base_atomic_parsing(raw_day_weight, checker, float_parser, error_message)
+    return base_atomic_parsing(raw_day_weight, checker, float_parser, error_message, raises=False)
 
 FIELD_PARSERS = [
-    (FieldIdentifier.GRAMS, parse_food_grams),
-    (FieldIdentifier.CALS, parse_food_cals),
     (FieldIdentifier.AMOUNT, parse_food_amount),
+    (FieldIdentifier.FOOD_NAME, parse_food_name),
+    (FieldIdentifier.CALS, parse_food_cals),
+    (FieldIdentifier.GRAMS, parse_food_grams),
+    (FieldIdentifier.PROTEIN, parse_food_protein),
     (FieldIdentifier.CARBS, parse_food_carbs),
     (FieldIdentifier.FAT, parse_food_fat),
-    (FieldIdentifier.PROTEIN, parse_food_protein),
-    (FieldIdentifier.FOOD_NAME, parse_food_name),
 ]

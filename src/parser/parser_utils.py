@@ -10,20 +10,23 @@ def identifier_to_index(i):
 def index_to_identifier(i):
     return i + 1
 
-def split_data_by(symbol, regs, inclusive=True, exact_match=True):
+def split_data_by(symbol, regs, include_symbol=True, exact_match=True, include_first=True):
     indices = get_indexes_of(symbol, regs, exact_match=exact_match)
     if len(indices) > 0:
         first = [regs[:indices[0]]]
-        if inclusive:
+        if include_symbol:
             last = [regs[indices[-1]:]]
             middle = [regs[current_idx: next_idx] for current_idx, next_idx in zip(indices, indices[1:])]
         else:
             last = [regs[indices[-1] + 1:]] if indices[-1] + 1 < len(regs) else []
             middle = [regs[current_idx + 1: next_idx] for current_idx, next_idx in zip(indices, indices[1:]) if current_idx + 1 < next_idx]
 
-        slices = first + middle + last
+        if include_first:
+            slices = first + middle + last
+        else:
+            slices = middle + last
     else:
-        slices = []
+        slices = [regs]
 
     return [s for s in slices if len(s) > 0]
 

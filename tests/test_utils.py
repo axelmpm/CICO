@@ -3,7 +3,7 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico')
 
 import unittest
 
-from src.utils import flatten, get_indexes_of, collapse, distribute
+from src.utils import flatten, get_indexes_of, collapse, distribute, tuple_flatten
 
 class Test_flatten(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class Test_flatten(unittest.TestCase):
         self.assertEqual(expected, res)
 
     def test3(self):
-        input = [[1, 2], [3, 4]]
+        input = [[1, 2], [[3, 4]]]
         res = flatten(input)
         expected = [1, 2, 3, 4]
         self.assertEqual(expected, res)
@@ -30,6 +30,69 @@ class Test_flatten(unittest.TestCase):
         res = flatten(input)
         expected = [1, 2, 3, 4]
         self.assertEqual(expected, res)
+
+    def test5(self):
+        input = [[[[1, 2, 3, 4]]]]
+        res = flatten(input)
+        expected = [1, 2, 3, 4]
+        self.assertEqual(expected, res)
+
+class Test_tuple_flatten(unittest.TestCase):
+
+    def test1(self):
+        input = []
+        res = tuple_flatten(input)
+        expected = []
+        self.assertEqual(expected, res)
+
+    def test2(self):
+        input = [1, 2, 3, 4]
+        res = tuple_flatten(input)
+        expected = [1, 2, 3, 4]
+        self.assertEqual(expected, res)
+
+    def test3(self):
+        input = ()
+        res = tuple_flatten(input)
+        expected = ()
+        self.assertEqual(expected, res)
+
+    def test4(self):
+        input = (1, 2, 3, 4)
+        res = tuple_flatten(input)
+        expected = (1, 2, 3, 4)
+        self.assertEqual(expected, res)
+
+    def test5(self):
+        input = 2
+        res = tuple_flatten(input)
+        expected = 2
+        self.assertEqual(expected, res)
+
+    def test6(self):
+        input = [(1, 2, 3), (1, 2, 3), (1, 2, 3)]
+        res = tuple_flatten(input)
+        expected = [(1, 2, 3), (1, 2, 3), (1, 2, 3)]
+        self.assertEqual(expected, res)
+
+    def test7(self):
+        input = [(1, 2, 3), 2, [(1, 2, 3)]]
+        res = tuple_flatten(input)
+        expected = [(1, 2, 3), 2, [(1, 2, 3)]]
+        self.assertEqual(expected, res)
+
+    def test8(self):
+        input = [((1, 2, 3), 2), (1, 2, 3), (1, 2, (1, 2, (1, 2, 3)))]
+        res = tuple_flatten(input)
+        expected = [(1, 2, 3, 2), (1, 2, 3), (1, 2, 1, 2, 1, 2, 3)]
+        self.assertEqual(expected, res)
+
+    def test9(self):
+        input = ([1, 2, 3], [1, 2], [3])
+        res = tuple_flatten(input)
+        expected = ([1, 2, 3], [1, 2], [3])
+        self.assertEqual(expected, res)
+
 class Test_get_indexes_of(unittest.TestCase):
 
     def test1(self):

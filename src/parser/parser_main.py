@@ -12,24 +12,24 @@ def parse_reg(raw_reg):
 def parse_meal(id, raw_meal):
     return id, [parse_reg(raw_reg) for raw_reg in raw_meal]
 
-def parse_day(raw_day):  # TODO que parse_day no se entere de la implementacion interna de la funcion que provee su input (la data esta nesteada en listas)
-    content = split_data_by(INTERLINE_SEPARATOR, raw_day, inclusive=False, exact_match=True)
+def parse_day(raw_day):
+    content = split_data_by(INTERLINE_SEPARATOR, raw_day, include_symbol=False, exact_match=True)
 
     if len(content) == 0 or len(content[0]) == 0:
         raise SyntaxError(f'day doesnt have day name: {raw_day}')
     else:
-        try:
-            day_name = parse_day_name(content[0][0])
-        except SyntaxError:
-            day_name = None
+        day_name = parse_day_name(content[0][0])
 
+    day_weight = None
     if len(content) > 1 and len(content[1]) > 0:
         day_weight = parse_day_weight(content[1][0])
 
-    return day_name, day_weight, [parse_meal(index_to_identifier(i), raw_meal) for i, raw_meal in enumerate(content[2:])]
+    start_of_meals_idx = 2 if day_weight else 1
 
-def parse_week(raw_week):  # TODO que parse_week no se entere de la implementacion interna de la funcion que provee su input (la data esta nesteada en listas)
-    content = strip_newlines_at_end(split_data_by(DIVIDER, raw_week, inclusive=False, exact_match=False))
+    return day_name, day_weight, [parse_meal(index_to_identifier(i), raw_meal) for i, raw_meal in enumerate(content[start_of_meals_idx:])]
+
+def parse_week(raw_week):
+    content = strip_newlines_at_end(split_data_by(DIVIDER, raw_week, include_symbol=False, exact_match=False))
 
     if len(content) != 8 or len(content[0]) == 0:
         raise SyntaxError(f'week doesnt have seven days or is lacking week number: {raw_week}')
@@ -38,7 +38,9 @@ def parse_week(raw_week):  # TODO que parse_week no se entere de la implementaci
 
 def parse_file(raw_file):
     file_name, raw_file_content = raw_file
-    return file_name, [parse_week(raw_week) for raw_week in split_data_by(WEEK_SYMBOL, raw_file_content, inclusive=True, exact_match=False) if len(raw_week) > 0]
+    raw_file_content = split_data_by(WEEK_SYMBOL, raw_file_content,
+                                     include_symbol=True, exact_match=False, include_first=False)
+    return file_name, [parse_week(raw_week) for raw_week in raw_file_content if len(raw_week) > 0]
 
 def parse_files(files):
     return [(parse_file(raw_file)) for raw_file in files]
