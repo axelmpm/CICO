@@ -1,25 +1,8 @@
 import sys
 sys.path.append(r'C:\Users\axelpm\Desktop\cico')
 
-from enum import Enum
-
 from src.utils import matches_with
-from parser_utils import remove_white_spaces_at_start_and_end
-from parser_constants import WEEK_SYMBOL, DAYS_NAMES, WEIGHT_PATTERN, NUMBER_PATTERN, INTEGER_PATTERN, FOOD_NAME_PATTERN
-
-class FieldIdentifier(Enum):
-    GRAMS = 1
-    CALS = 2
-    AMOUNT = 3
-    CARBS = 4
-    FAT = 5
-    PROTEIN = 6
-    WATER = 7
-    FOOD_NAME = 8
-    SALT = 9
-    FIBER = 10
-    GLYCEMIC_INDEX = 11
-    QUALITY = 12
+from parser_constants import WEEK_SYMBOL, DAYS_NAMES, WEIGHT_PATTERN, NUMBER_PATTERN, INTEGER_PATTERN
 
 def float_parser(match):
     return float(match)
@@ -43,59 +26,6 @@ def base_atomic_parsing(raw, checker, parser, error_message, raises=True):
             raise SyntaxError(f'{error_message}: {raw}')
         else:
             return None
-
-def parse_food_grams(raw_reg):
-    error_message = 'invalid grams format'
-    return base_atomic_parsing(raw_reg, unit_checker('g'), float_parser, error_message, raises=False)
-
-def parse_food_carbs(raw_reg):
-    error_message = 'invalid carbs format'
-    return base_atomic_parsing(raw_reg, unit_checker('c'), float_parser, error_message, raises=False)
-
-def parse_food_fat(raw_reg):
-    error_message = 'invalid fat format'
-    return base_atomic_parsing(raw_reg, unit_checker('f'), float_parser, error_message, raises=False)
-
-def parse_food_protein(raw_reg):
-    error_message = 'invalid protein format'
-    return base_atomic_parsing(raw_reg, unit_checker('p'), float_parser, error_message, raises=False)
-
-def parse_food_cals(raw_reg):
-
-    def checker(raw_reg):
-        pattern = f'^.*({FOOD_NAME_PATTERN}).*?({NUMBER_PATTERN})(\\s.*|$)'
-        patterns = [pattern]
-        target = NUMBER_PATTERN
-        return matches_with(patterns, target, raw_reg)
-
-    error_message = 'invalid cals format'
-    return base_atomic_parsing(raw_reg, checker, float_parser, error_message, raises=False)
-
-def parse_food_amount(raw_reg):
-
-    def checker(raw_reg):
-        pattern = f'^\\s*?({NUMBER_PATTERN})\\s*({FOOD_NAME_PATTERN}).*$'
-        patterns = [pattern]
-        target = NUMBER_PATTERN
-        return matches_with(patterns, target, raw_reg)
-
-    error_message = 'invalid amount format'
-    return base_atomic_parsing(raw_reg, checker, float_parser, error_message, raises=False)
-
-def parse_food_name(raw_reg):
-
-    def checker(raw_reg):
-        pattern = f'^.*?({FOOD_NAME_PATTERN}).*$'
-        patterns = [pattern]
-        target = FOOD_NAME_PATTERN
-        return matches_with(patterns, target, raw_reg)
-
-    def parser(matched):
-        parsed = remove_white_spaces_at_start_and_end(matched)
-        return parsed if len(parsed) > 0 else None
-
-    error_message = 'invalid name format'
-    return base_atomic_parsing(raw_reg, checker, parser, error_message, raises=False)
 
 def parse_week_num(raw_week_num):
 
@@ -130,13 +60,3 @@ def parse_day_weight(raw_day_weight):
 
     error_message = 'day weight format invalid'
     return base_atomic_parsing(raw_day_weight, checker, float_parser, error_message, raises=False)
-
-FIELD_PARSERS = [
-    (FieldIdentifier.AMOUNT, parse_food_amount),
-    (FieldIdentifier.FOOD_NAME, parse_food_name),
-    (FieldIdentifier.CALS, parse_food_cals),
-    (FieldIdentifier.GRAMS, parse_food_grams),
-    (FieldIdentifier.PROTEIN, parse_food_protein),
-    (FieldIdentifier.CARBS, parse_food_carbs),
-    (FieldIdentifier.FAT, parse_food_fat),
-]

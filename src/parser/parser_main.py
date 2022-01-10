@@ -3,8 +3,9 @@ sys.path.append(r'C:\Users\axelpm\Desktop\cico')
 
 from src.utils import collapse
 from parser_utils import split_data_by, index_to_identifier, strip_newlines_at_end, factor_out_file_name
-from parser_atomics import FIELD_PARSERS, parse_day_name, parse_day_weight, parse_week_num
+from parser_atomics import parse_day_name, parse_day_weight, parse_week_num
 from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR
+from parser_fields import FIELD_PARSERS
 
 def parse_reg(raw_reg):
     return [(field_identifier, field_parser(raw_reg)) for field_identifier, field_parser in FIELD_PARSERS]
@@ -45,5 +46,5 @@ def parse_file(raw_file):
 def parse_files(files):
     return [(parse_file(raw_file)) for raw_file in files]
 
-def parse(file_reg):
-    return collapse(parse_files(factor_out_file_name(file_reg)))
+def parse(file_reg):  # TODO firts component in return must be list of syntax errored
+    return None, collapse(parse_files(factor_out_file_name(file_reg)))

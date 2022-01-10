@@ -8,8 +8,8 @@ import unittest
 from src.parser.parser_utils import strip_newlines_at_end, split_data_by
 from src.reader.reader import read
 from src.parser.parser_main import parse_reg, parse_meal, parse_day, parse_week, parse_file, parse
-from src.parser.parser_atomics import parse_food_cals, parse_food_amount, parse_food_carbs, parse_food_fat, parse_food_protein, parse_food_grams
-from src.parser.parser_atomics import parse_week_num, parse_day_weight, parse_day_name, parse_food_name
+from src.parser.parser_fields import parse_food_cals, parse_food_amount, parse_food_carbs, parse_food_fat, parse_food_protein, parse_food_grams, parse_food_name
+from src.parser.parser_atomics import parse_week_num, parse_day_weight, parse_day_name
 from src.paths import TEST_DATA_DIR_LARGE
 
 class Test_parse_week_num(unittest.TestCase):
@@ -1632,7 +1632,7 @@ class Test_parse(unittest.TestCase):
 
     def test1(self):
         input = read(TEST_DATA_DIR_LARGE)
-        res = parse(input)
+        _, res = parse(input)
         self.assertIsInstance(res, list)
         self.assertTrue(all([type(reg) == tuple and len(reg) > 5 for reg in res]))
 
