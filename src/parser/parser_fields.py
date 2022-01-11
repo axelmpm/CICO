@@ -13,15 +13,17 @@ AMOUNT = 'amount'
 PROTEIN = 'protein'
 CARBS = 'carbs'
 FAT = 'fat'
-WATER = 'water',
+WATER = 'water'
 FOOD_NAME = 'food'
 SALT = 'salt'
-FIBER = 'fiber',
+FIBER = 'fiber'
 GLYCEMIC_INDEX = 'glycemic index'
 QUALITY = 'quality'
 RAW_REG = 'register'
 
-FIELDS_ORDER = [FOOD_NAME, AMOUNT, GRAMS, CALS, PROTEIN, CARBS, FAT, WATER, SALT, FIBER, GLYCEMIC_INDEX, QUALITY, RAW_REG]
+ORDERED_FIELDS = [FOOD_NAME, AMOUNT, GRAMS, CALS, PROTEIN, CARBS, FAT, WATER, SALT, FIBER, GLYCEMIC_INDEX, QUALITY, RAW_REG]
+VISIBLE_FIELDS = [FOOD_NAME, GRAMS, CALS, PROTEIN, CARBS, FAT]
+AGGREGABLE_FIELDS = [GRAMS, CALS, PROTEIN, CARBS, FAT, WATER, SALT, FIBER]
 
 def parse_food_grams(raw_reg):
     error_message = 'invalid grams format'
@@ -86,6 +88,17 @@ def parse_raw_reg(raw_reg):
 
     error_message = 'INTERNAL ERROR, <RAW REG> SHOUDNT RAISE ERROR'
     return base_atomic_parsing(raw_reg, checker, parser, error_message, raises=False)
+
+def set_correct_field_types(data):
+    data[AMOUNT] = data[AMOUNT].astype('Float32')
+    data[FOOD_NAME] = data[FOOD_NAME].astype('string')
+    data[CALS] = data[CALS].astype('Float32')
+    data[GRAMS] = data[GRAMS].astype('Float32')
+    data[PROTEIN] = data[PROTEIN].astype('Float32')
+    data[CARBS] = data[CARBS].astype('Float32')
+    data[FAT] = data[FAT].astype('Float32')
+    data[RAW_REG] = data[RAW_REG].astype('string')
+    return data
 
 FIELD_PARSERS = [
     (AMOUNT, parse_food_amount),
