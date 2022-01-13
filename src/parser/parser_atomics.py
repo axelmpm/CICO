@@ -1,6 +1,3 @@
-import sys
-sys.path.append(r'C:\Users\axelpm\Desktop\cico')
-
 from src.utils import matches_with
 from parser_constants import WEEK_SYMBOL, DAYS_NAMES, WEIGHT_PATTERN, NUMBER_PATTERN, INTEGER_PATTERN
 

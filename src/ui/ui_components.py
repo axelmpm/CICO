@@ -1,20 +1,16 @@
-import sys
-sys.path.append(r'C:\Users\axelpm\Desktop\cico')
-sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\processor')
-
 from dash import dash_table
 from dash import html
 
-from src.processor.processor_constants import VISIBLE_COLUMNS
-from src.processor.processor_lib import get_all_food_names
+from src.database.fields_constants import VISIBLE_COLUMNS
+from src.processor.processor_lib import get_all_food_names, data_into_records
 
 def table(id, data):
     return dash_table.DataTable(
-        id=f'table{id}',
+        id=id,
         columns=[{"name": c, "id": c,
                   "deletable": True, "selectable": True,
                   "hideable": True} for c in data.columns],
-        data=data.to_dict('records'),
+        data=data.into_tabular(),
         editable=True,
         filter_action="native",
         sort_action="native",
@@ -27,7 +23,7 @@ def table(id, data):
         page_action="native",
         page_current=0,
         page_size=6,
-        hidden_columns=[c for c in data.columns if c not in VISIBLE_COLUMNS],
+        # hidden_columns=[c for c in data.columns if c not in VISIBLE_COLUMNS],
         style_header={
             'backgroundColor': 'rgb(210, 210, 210)',
             'color': 'black',

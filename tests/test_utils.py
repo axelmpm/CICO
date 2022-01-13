@@ -1,5 +1,10 @@
 import sys
 sys.path.append(r'C:\Users\axelpm\Desktop\cico')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\pipeline')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\processor')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\database')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\reader')
 
 import unittest
 

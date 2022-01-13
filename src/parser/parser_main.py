@@ -1,14 +1,12 @@
-import sys
-sys.path.append(r'C:\Users\axelpm\Desktop\cico')
-
 from src.utils import collapse
 from parser_utils import split_data_by, index_to_identifier, strip_newlines_at_end, factor_out_file_name
 from parser_atomics import parse_day_name, parse_day_weight, parse_week_num
 from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR
 from parser_fields import FIELD_PARSERS
+from src.database.fields_constants import FILE, WEEK, DAY_NAME, WEIGHT, MEAL_NUM, AMOUNT, FOOD_NAME, GRAMS, REG
 
 def parse_reg(raw_reg):
-    return [(field_identifier, field_parser(raw_reg)) for field_identifier, field_parser in FIELD_PARSERS]
+    return tuple(field_parser(raw_reg) for field_parser in FIELD_PARSERS)
 
 def parse_meal(id, raw_meal):
     return id, [parse_reg(raw_reg) for raw_reg in raw_meal]
@@ -48,3 +46,5 @@ def parse_files(files):
 
 def parse(file_reg):  # TODO firts component in return must be list of syntax errored
     return None, collapse(parse_files(factor_out_file_name(file_reg)))
+
+PARSER_COLUMNS_ORDER = [FILE, WEEK, DAY_NAME, WEIGHT, MEAL_NUM, AMOUNT, FOOD_NAME, GRAMS, REG]

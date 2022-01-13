@@ -1,6 +1,3 @@
-import sys
-sys.path.append(r'C:\Users\axelpm\Desktop\cico')
-
 from src.reader.reader import file_from, regs_from
 from src.utils import get_indexes_of, split_into_classes
 

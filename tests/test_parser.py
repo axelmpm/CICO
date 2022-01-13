@@ -1,6 +1,9 @@
 import sys
 sys.path.append(r'C:\Users\axelpm\Desktop\cico')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\pipeline')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\processor')
 sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\database')
 sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\reader')
 
 import unittest
@@ -914,44 +917,44 @@ class Test_parse_reg(unittest.TestCase):
 
     def test1(self):
         input = '2 long name food 100 200g 10p 5c 3f\n'
-        res = [value for _, value in parse_reg(input)]
-        expected = [2.0, 'long name food', 100.0, 200.0, 10.0, 5.0, 3.0]
+        res = parse_reg(input)
+        expected = (2.0, 'long name food', 200.0, input)
         self.assertEqual(res, expected)
 
     def test2(self):
         input = 'long name food 100 200g 10p 5c 3f\n'
-        res = [value for _, value in parse_reg(input)]
-        expected = [None, 'long name food', 100.0, 200.0, 10.0, 5.0, 3.0]
+        res = parse_reg(input)
+        expected = (None, 'long name food', 200.0, input)
         self.assertEqual(res, expected)
 
     def test3(self):
         input = 'long name food 100 200g'
-        res = [value for _, value in parse_reg(input)]
-        expected = [None, 'long name food', 100.0, 200.0, None, None, None]
+        res = parse_reg(input)
+        expected = (None, 'long name food', 200.0, input)
         self.assertEqual(res, expected)
 
     def test4(self):
         input = 'long name food 200g'
-        res = [value for _, value in parse_reg(input)]
-        expected = [None, 'long name food', None, 200.0, None, None, None]
+        res = parse_reg(input)
+        expected = (None, 'long name food', 200.0, input)
         self.assertEqual(res, expected)
 
     def test5(self):
         input = '2.0 long name food 200g'
-        res = [value for _, value in parse_reg(input)]
-        expected = [2.0, 'long name food', None, 200.0, None, None, None]
+        res = parse_reg(input)
+        expected = (2.0, 'long name food', 200.0, input)
         self.assertEqual(res, expected)
 
     def test6(self):
         input = '2.5 200.5'
-        res = [value for _, value in parse_reg(input)]
-        expected = [None, None, None, None, None, None, None]
+        res = parse_reg(input)
+        expected = (None, None, None, input)
         self.assertEqual(res, expected)
 
     def test7(self):
         input = '200'
-        res = [value for _, value in parse_reg(input)]
-        expected = [None, None, None, None, None, None, None]
+        res = parse_reg(input)
+        expected = (None, None, None, input)
         self.assertEqual(res, expected)
 
 class Test_parse_meal(unittest.TestCase):

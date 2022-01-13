@@ -1,11 +1,11 @@
-import sys
-sys.path.append(r'C:\Users\axelpm\Desktop\cico')
-sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
-
 from os import listdir
 from os.path import isfile
 
 from reader_constants import CICO_FILE_KEYWORD, TXT_EXTENTION, DIR_SEPARATOR
+
+def open_and_process_file(path, processor, args):
+    with open(path, 'r', encoding='utf-8') as f:
+        return processor(f, *args)
 
 def compose_file_path(dir, filename):
     return dir + DIR_SEPARATOR + filename
@@ -27,10 +27,14 @@ def read(dir):
 
     entries = listFilesIn(dir)
     file_reg = []
+
+    def processor(f, file_reg, file_path):
+        for line in f:
+            file_reg.append((file_path, line))
+
     for file_path in entries:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            for line in f:
-                file_reg.append((file_path, line))
+        open_and_process_file(file_path, processor, (file_reg, file_path))
+
     return file_reg
 
 def file_from(file_reg):

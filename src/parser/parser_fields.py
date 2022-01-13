@@ -1,29 +1,8 @@
-import sys
-sys.path.append(r'C:\Users\axelpm\Desktop\cico')
-sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\reader')
-
+from src.database.fields_constants import AMOUNT, FOOD_NAME, CALS, GRAMS, PROTEIN, CARBS, FAT, REG
 from parser_constants import NUMBER_PATTERN, FOOD_NAME_PATTERN
 from parser_atomics import base_atomic_parsing, float_parser, unit_checker
 from parser_utils import remove_white_spaces_at_start_and_end
 from src.utils import matches_with
-
-GRAMS = 'grams'
-CALS = 'cals'
-AMOUNT = 'amount'
-PROTEIN = 'protein'
-CARBS = 'carbs'
-FAT = 'fat'
-WATER = 'water'
-FOOD_NAME = 'food'
-SALT = 'salt'
-FIBER = 'fiber'
-GLYCEMIC_INDEX = 'glycemic index'
-QUALITY = 'quality'
-RAW_REG = 'register'
-
-ORDERED_FIELDS = [FOOD_NAME, AMOUNT, GRAMS, CALS, PROTEIN, CARBS, FAT, WATER, SALT, FIBER, GLYCEMIC_INDEX, QUALITY, RAW_REG]
-VISIBLE_FIELDS = [FOOD_NAME, GRAMS, CALS, PROTEIN, CARBS, FAT]
-AGGREGABLE_FIELDS = [GRAMS, CALS, PROTEIN, CARBS, FAT, WATER, SALT, FIBER]
 
 def parse_food_grams(raw_reg):
     error_message = 'invalid grams format'
@@ -97,16 +76,7 @@ def set_correct_field_types(data):
     data[PROTEIN] = data[PROTEIN].astype('Float32')
     data[CARBS] = data[CARBS].astype('Float32')
     data[FAT] = data[FAT].astype('Float32')
-    data[RAW_REG] = data[RAW_REG].astype('string')
+    data[REG] = data[REG].astype('string')
     return data
 
-FIELD_PARSERS = [
-    (AMOUNT, parse_food_amount),
-    (FOOD_NAME, parse_food_name),
-    (CALS, parse_food_cals),
-    (GRAMS, parse_food_grams),
-    (PROTEIN, parse_food_protein),
-    (CARBS, parse_food_carbs),
-    (FAT, parse_food_fat),
-    (RAW_REG, parse_raw_reg),
-]
+FIELD_PARSERS = [parse_food_amount, parse_food_name, parse_food_grams, parse_raw_reg]

@@ -1,6 +1,9 @@
 import sys
 sys.path.append(r'C:\Users\axelpm\Desktop\cico')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\pipeline')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\processor')
 sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\parser')
+sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\database')
 sys.path.append(r'C:\Users\axelpm\Desktop\cico\src\reader')
 
 import unittest
@@ -19,7 +22,7 @@ class Test_listFilesIn(unittest.TestCase):
 
     def test1(self):
         res = listFilesIn(TEST_DATA_DIR)
-        expected = 3
+        expected = 2
         self.assertEqual(expected, len(res))
 """
 class Test_new_regs_exist_at(unittest.TestCase):
