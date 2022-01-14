@@ -37,6 +37,9 @@ def read(dir):
 
     return file_reg
 
+def read_all(dirs):
+    return sum([read(dir) for dir in dirs], [])
+
 def file_from(file_reg):
     return file_reg[0]
 

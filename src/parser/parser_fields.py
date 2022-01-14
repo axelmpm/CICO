@@ -1,4 +1,3 @@
-from src.database.fields_constants import AMOUNT, FOOD_NAME, CALS, GRAMS, PROTEIN, CARBS, FAT, REG
 from parser_constants import NUMBER_PATTERN, FOOD_NAME_PATTERN
 from parser_atomics import base_atomic_parsing, float_parser, unit_checker
 from parser_utils import remove_white_spaces_at_start_and_end
@@ -67,16 +66,5 @@ def parse_raw_reg(raw_reg):
 
     error_message = 'INTERNAL ERROR, <RAW REG> SHOUDNT RAISE ERROR'
     return base_atomic_parsing(raw_reg, checker, parser, error_message, raises=False)
-
-def set_correct_field_types(data):
-    data[AMOUNT] = data[AMOUNT].astype('Float32')
-    data[FOOD_NAME] = data[FOOD_NAME].astype('string')
-    data[CALS] = data[CALS].astype('Float32')
-    data[GRAMS] = data[GRAMS].astype('Float32')
-    data[PROTEIN] = data[PROTEIN].astype('Float32')
-    data[CARBS] = data[CARBS].astype('Float32')
-    data[FAT] = data[FAT].astype('Float32')
-    data[REG] = data[REG].astype('string')
-    return data
 
 FIELD_PARSERS = [parse_food_amount, parse_food_name, parse_food_grams, parse_raw_reg]

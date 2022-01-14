@@ -3,7 +3,7 @@ from parser_utils import split_data_by, index_to_identifier, strip_newlines_at_e
 from parser_atomics import parse_day_name, parse_day_weight, parse_week_num
 from parser_constants import WEEK_SYMBOL, DIVIDER, INTERLINE_SEPARATOR
 from parser_fields import FIELD_PARSERS
-from src.database.fields_constants import FILE, WEEK, DAY_NAME, WEIGHT, MEAL_NUM, AMOUNT, FOOD_NAME, GRAMS, REG
+from src.data.data_constants import FILE, WEEK, DAY_NAME, WEIGHT, MEAL_NUM, AMOUNT, FOOD_NAME, GRAMS, REG
 
 def parse_reg(raw_reg):
     return tuple(field_parser(raw_reg) for field_parser in FIELD_PARSERS)
