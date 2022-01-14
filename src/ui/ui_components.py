@@ -2,14 +2,15 @@ from dash import dash_table
 from dash import html
 
 from src.data.data import Data
+from src.data.data_constants import VISIBLE_COLUMNS
 
 def table(id, data):
     return dash_table.DataTable(
         id=id,
         columns=[{"name": c, "id": c,
                   "deletable": True, "selectable": True,
-                  "hideable": True} for c in data.get().columns],
-        data=Data.to_tabular(data.get()),
+                  "hideable": True} for c in data.columns],
+        data=Data.to_tabular(data),
         editable=True,
         filter_action="native",
         sort_action="native",
@@ -22,7 +23,7 @@ def table(id, data):
         page_action="native",
         page_current=0,
         page_size=6,
-        # hidden_columns=[c for c in data.columns if c not in VISIBLE_COLUMNS],
+        hidden_columns=[c for c in data.columns if c not in VISIBLE_COLUMNS],
         style_header={
             'backgroundColor': 'rgb(210, 210, 210)',
             'color': 'black',

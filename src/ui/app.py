@@ -21,11 +21,11 @@ foods = Foods.load()
 app = dash.Dash(external_stylesheets=[dbc.themes.DARKLY])
 
 app.layout = html.Div([
-    table('regs-table', regs),
-    table('foods-table', foods),
-    suggestions('foods-suggested-inputs', foods),
     dcc.Input(id='food-name-read-input', type='text', list='foods-suggested-inputs', value=''),
     html.Button(id='foods-search-button', n_clicks=0, children='Search'),
+    table('foods-table', foods.get()),
+    suggestions('foods-suggested-inputs', foods),
+    table('regs-table', regs.get()),
     dcc.Store(id='regs-db-cache', data=Data.to_cacheable(regs.get())),
     dcc.Store(id='foods-db-cache', data=Data.to_cacheable(foods.get()))
 ])
