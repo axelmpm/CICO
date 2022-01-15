@@ -2,7 +2,6 @@ from dash import dash_table
 from dash import html
 
 from src.data.data import Data
-from src.data.data_constants import VISIBLE_COLUMNS
 
 def table(id, data):
     return dash_table.DataTable(
@@ -23,7 +22,6 @@ def table(id, data):
         page_action="native",
         page_current=0,
         page_size=6,
-        hidden_columns=[c for c in data.columns if c not in VISIBLE_COLUMNS],
         style_header={
             'backgroundColor': 'rgb(210, 210, 210)',
             'color': 'black',
